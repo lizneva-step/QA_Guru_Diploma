@@ -1,0 +1,19 @@
+{
+  "name": "qa-guru-api-challenges-homework",
+  "version": "1.0.0",
+  "description": "API tests for QA Guru course",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.js --timeout 10000",
+    "test:watch": "mocha tests/**/*.js --watch"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
+  }
+}
