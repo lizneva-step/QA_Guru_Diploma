@@ -1,5 +1,6 @@
 import { ChallengerService, ChallengesService, TodosService } from "./index.js";
 
+//основной класс API сервиса
 export class Api {
   constructor(request) {
     this.request = request;

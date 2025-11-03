@@ -7,7 +7,7 @@ export class TodosService {
 
   async getAll(token, testinfo) {
     return test.step("GET /todos - получить все задачи", async () => {
-      const response = await this.request.get(`${testinfo.project.use.apiURL}/todos`, {
+      const response = await this.request.get(`${testinfo.project.use.baseURL}/todos`, {
         headers: { 
           "X-CHALLENGER": token,
           "Content-Type": "application/json"
