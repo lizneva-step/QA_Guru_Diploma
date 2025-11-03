@@ -5,8 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha tests/**/*.js --timeout 10000",
-    "test:watch": "mocha tests/**/*.js --watch"
+    "test": "npx playwright test",
+    "testUI": "npx playwright test --ui",
+    "report": "npx playwright show-report",
+    "allureFile": "npx allure awesome ./allure-results --single-file"
   },
   "repository": {
     "type": "git",

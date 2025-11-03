@@ -1,2 +1,0 @@
-https://apichallenges.herokuapp.com//gui/challenges/84d1654e-5c4d-4836-9154-5217a5484d3e
-Создан новый challenger токен: 0cbcb1cd-d17d-4d09-8ad9-bb3e311ece39

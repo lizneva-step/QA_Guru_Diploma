@@ -16,7 +16,7 @@ export class ChallengerService {
 
     async get(testinfo) {
     return test.step("GET /challenger", async () => {
-      const response = await this.request.post(
+      const response = await this.request.get(
         `${testinfo.project.use.apiURL}/challenger`,
       );
       return response;
