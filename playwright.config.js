@@ -98,7 +98,7 @@ export default defineConfig({
       testMatch: '**/*.spec.js',
       use: { 
         ...devices['Desktop Chrome'],
-        baseURL: 'https://apichallenges.herokuapp.com/',  
+        baseURL: 'https://apichallenges.herokuapp.com',  
       },
     }
   ],

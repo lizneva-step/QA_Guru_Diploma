@@ -6,3 +6,7 @@ node_modules/
 /allure-report/
 /allure-results/
 /.allure/
+
+
+package-lock.json
+eslint.config.js
