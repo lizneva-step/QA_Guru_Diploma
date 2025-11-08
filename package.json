@@ -8,7 +8,16 @@
     "test": "npx playwright test",
     "testUI": "npx playwright test --ui",
     "report": "npx playwright show-report",
-    "allureFile": "npx allure awesome ./allure-results --single-file"
+    "allureFile": "npx allure awesome ./allure-results --single-file",
+    "test:api": "npx playwright test --grep=@API",
+    "test:functional": "npx playwright test --grep=@functional",
+    "test:validation": "npx playwright test --grep=@validation",
+    "test:error_handling": "npx playwright test --grep=@error_handling",
+    "test:get": "npx playwright test --grep=@GET",
+    "test:post": "npx playwright test --grep=@POST",
+    "test:put": "npx playwright test --grep=@PUT",
+    "test:delete": "npx playwright test --grep=@DELETE",
+    "test:patch": "npx playwright test --grep=@PATCH"
   },
   "repository": {
     "type": "git",
