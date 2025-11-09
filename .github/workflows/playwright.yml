@@ -1,0 +1,149 @@
+# Название workflow — профессионально и нейтрально
+name: Playwright CI Pipeline
+
+# Запускаем при:
+# - push в ветки main/master
+# - pull request в эти ветки
+# - ручном запуске через интерфейс
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Основной процесс: запуск тестов и отчётность
+jobs:
+  ci-tests:
+    name: 🧪 Run & Report
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+
+    steps:
+      # 🔁 1. Получаем код из репозитория
+      - name: 🔎 Checkout code
+        uses: actions/checkout@v4
+
+      # ⚙️ 2. Устанавливаем Node.js и кэшируем зависимости
+      - name: 📦 Setup Node.js & Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      # 📥 3. Устанавливаем зависимости
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      # 🕹️ 4. Устанавливаем Playwright и браузеры
+      - name: 🌐 Install Playwright
+        run: npx playwright install --with-deps
+
+      # ▶️ 5. Запуск всех тестов
+      - name: ▶️ Execute tests
+        run: npm run test
+
+      # 📁 6. Сохраняем артефакты (всегда)
+      - name: 📁 Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-results
+            allure-results
+          retention-days: 20
+
+      # 📈 7. Подготавливаем историю для Allure
+      - name: 🗃️ Fetch previous reports
+        uses: actions/checkout@v4
+        if: always()
+        with:
+          ref: gh-pages
+          path: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 📊 8. Генерируем HTML-отчёт
+      - name: 📊 Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+          keep_reports: 20
+
+      # 🌐 9. Публикуем отчёт на GitHub Pages
+      - name: 🌐 Deploy Allure Report
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      # 📦 10. Устанавливаем allurectl с кэшированием
+      - name: 📦 Setup allurectl
+        if: always()
+        run: |
+          # Кэшируем allurectl
+          if [ ! -f "/usr/local/bin/allurectl" ]; then
+            echo "Installing allurectl..."
+            curl -o allurectl -L "https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64"
+            chmod +x allurectl
+            sudo mv allurectl /usr/local/bin/
+          fi
+
+      # ☁️ 11. Загружаем результаты в Allure TestOps
+      - name: ☁️ Upload to Allure TestOps
+        if: always()
+        run: |
+          allurectl upload allure-results \
+            --endpoint https://allure.autotests.cloud \
+            --project-id 4983 \
+            --token ${{ secrets.ALLURE_TOKEN }} \
+            --launch-name "CI Run #${{ github.run_number }}"
+
+      # 📋 12. Извлекаем статистику из отчёта
+      - name: 📋 Parse test summary
+        id: parse_summary
+        if: always()
+        run: |
+          file="allure-report/widgets/summary.json"
+          if [ -f "$file" ]; then
+            echo "PASSED=$(jq -r '.statistic.passed' $file)" >> $GITHUB_ENV
+            echo "FAILED=$(jq -r '.statistic.failed' $file)" >> $GITHUB_ENV
+            echo "SKIPPED=$(jq -r '.statistic.skipped' $file)" >> $GITHUB_ENV
+            echo "TOTAL=$(jq -r '.statistic.total' $file)" >> $GITHUB_ENV
+          fi
+
+      # 📢 13. Отправляем уведомление в Telegram
+      - name: 📢 Notify in Telegram
+        if: always()
+        run: |
+          status=${{ job.status }}
+          if [ "$status" = "success" ]; then
+            emoji="✅"
+            text="ТЕСТЫ ПРОЙДЕНЫ"
+          else
+            emoji="❌"
+            text="ОШИБКИ В ТЕСТАХ"
+          fi
+
+          msg="$emoji *$text* $emoji%0A"
+          msg+="%0A📊 *Результаты*:%0A"
+          msg+="▫️ Всего: *$TOTAL*%0A"
+          msg+="✅ Пройдено: *$PASSED*%0A"
+          msg+="❌ Упали: *$FAILED*%0A"
+          msg+="⏭️ Пропущено: *$SKIPPED*%0A"
+          msg+="%0A━━━━━━━━━━━━━━━━━%0A"
+          msg+="🔗 [Отчёт Allure](https://lizneva-step.github.io/QA_Guru_Diploma/)%0A"
+          msg+="🧪 [TestOps](https://allure.autotests.cloud/project/4983)%0A"
+          msg+="📦 [Артефакты]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)%0A"
+          msg+="%0A🏷️ *Запуск #${{ github.run_number }}*"
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d parse_mode=Markdown \
+            -d text="$msg"
