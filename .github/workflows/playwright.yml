@@ -133,13 +133,14 @@ jobs:
 
           msg="$emoji *$text* $emoji%0A"
           msg+="%0A📊 *Результаты*:%0A"
-          msg+="▫️ Всего: *$TOTAL*%0A"
+
+          msg+="📋 Всего: *$TOTAL*%0A"
           msg+="✅ Пройдено: *$PASSED*%0A"
           msg+="❌ Упали: *$FAILED*%0A"
           msg+="⏭️ Пропущено: *$SKIPPED*%0A"
           msg+="%0A━━━━━━━━━━━━━━━━━%0A"
           msg+="🔗 [Отчёт Allure](https://lizneva-step.github.io/QA_Guru_Diploma/)%0A"
-          msg+="🧪 [TestOps](https://allure.autotests.cloud/project/4983)%0A"
+          msg+="🧪 [TestOps](https://allure.autotests.cloud/project/4993)%0A"
           msg+="📦 [Артефакты]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)%0A"
           msg+="%0A🏷️ *Запуск #${{ github.run_number }}*"
 
