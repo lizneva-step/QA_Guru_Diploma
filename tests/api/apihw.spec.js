@@ -1,11 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { Api } from "../src/api.service";
-import { TodosService } from "../src/todos.service.js";
-import { toDoBuilder } from "../src/builders/builders.todo.js";
+import { Api } from "../../src/api.service";
+import { TodosService } from "../../src/todos.service.js";
+import { toDoBuilder } from "../../src/builders/builders.todo.js";
 import { faker } from "@faker-js/faker";
-
-
-
 
 test.describe("Challenge API", () => {
   let token;

@@ -1,35 +1,26 @@
 {
-  "name": "QA-Guru-API-Challenges-homework",
+  "name": "lt-diploma-project",
   "version": "1.0.0",
-  "description": "API tests for QA Guru course",
+  "description": "Unified UI and API testing project",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "npx playwright test",
-    "testUI": "npx playwright test --ui",
-    "report": "npx playwright show-report",
-    "allureFile": "npx allure awesome ./allure-results --single-file",
-    "test:api": "npx playwright test --grep=@API",
-    "test:functional": "npx playwright test --grep=@functional",
-    "test:validation": "npx playwright test --grep=@validation",
-    "test:error_handling": "npx playwright test --grep=@error_handling",
-    "test:get": "npx playwright test --grep=@GET",
-    "test:post": "npx playwright test --grep=@POST",
-    "test:put": "npx playwright test --grep=@PUT",
-    "test:delete": "npx playwright test --grep=@DELETE",
-    "test:patch": "npx playwright test --grep=@PATCH"
+    "test:ui": "npx playwright test tests/ui",
+    "test:ui:headed": "npx playwright test tests/ui --headed",
+    "test:api": "npx playwright test tests/api",
+    "test:api:functional": "npx playwright test tests/api --grep=@functional",
+    "test:api:validation": "npx playwright test tests/api --grep=@validation",
+    "test:api:error_handling": "npx playwright test tests/api --grep=@error_handling",
+    "test:api:get": "npx playwright test tests/api --grep=@GET",
+    "test:api:post": "npx playwright test tests/api --grep=@POST",
+    "test:api:put": "npx playwright test tests/api --grep=@PUT",
+    "test:api:delete": "npx playwright test tests/api --grep=@DELETE",
+    "test:api:patch": "npx playwright test tests/api --grep=@PATCH"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lizneva-step/QA-Guru-API-Challenges-homework.git"
-  },
-  "keywords": [],
+  "keywords": ["ui-testing", "api-testing", "playwright", "ui"],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lizneva-step/QA-Guru-API-Challenges-homework/issues"
-  },
-  "homepage": "https://github.com/lizneva-step/QA-Guru-API-Challenges-homework#readme",
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
     "allure-playwright": "^3.4.2",
