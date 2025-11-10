@@ -101,7 +101,7 @@ jobs:
         run: |
           allurectl upload allure-results \
             --endpoint https://allure.autotests.cloud \
-            --project-id 4983 \
+            --project-id 4993 \
             --token ${{ secrets.ALLURE_TOKEN }} \
             --launch-name "CI Run #${{ github.run_number }}"
 
@@ -134,9 +134,9 @@ jobs:
           msg="$emoji *$text* $emoji%0A"
           msg+="%0A📊 *Результаты*:%0A"
 
-          msg+="📋 Всего:     *$TOTAL*%0A"
-          msg+="✅ Пройдено:  *$PASSED*%0A"
-          msg+="❌ Упали:     *$FAILED*%0A"
+          msg+="📋 Всего: *$TOTAL*%0A"
+          msg+="✅ Пройдено: *$PASSED*%0A"
+          msg+="❌ Упали: *$FAILED*%0A"
           msg+="⏭️ Пропущено: *$SKIPPED*%0A"
           msg+="%0A━━━━━━━━━━━━━━━━━%0A"
           msg+="🔗 [Отчёт Allure](https://lizneva-step.github.io/QA_Guru_Diploma/)%0A"
