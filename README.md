@@ -80,15 +80,6 @@
 
 ## 🏁 Запуск локально
 
-```bash
-git clone https://github.com/lizneva-step/QA_Guru_Diploma.git
-cd QA_Guru_Diploma
-npm install
-npx playwright test
-
-
-# 🏁 Запуск локально
-
 1. Клонируй репозиторий: git clone https://github.com/lizneva-step/QA_Guru_Diploma.git
 2. Установи зависимости: npm install
 3. Запусти тесты npx playwright test
