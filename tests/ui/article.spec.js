@@ -3,11 +3,9 @@ import { faker } from "@faker-js/faker";
 import { UserBuilder } from "../../src/builders/index.js";
 import { ArticleBuilder } from "../../src/builders/index.js";
 
-const URL = "https://realworld.qa.guru/";
-
 test.describe("Действия со статьёй", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(URL);
+    await page.goto('/');
   });
 
   test("Пользователь может создать новую статью", async ({ page, app }) => {

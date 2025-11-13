@@ -10,11 +10,9 @@ import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
 import { UserBuilder } from "../../src/builders/index.js";
 
-const URL = "https://realworld.qa.guru/";
-
 test.describe("Главная страница", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(URL);
+    await page.goto('/');
   });
 
   test("Пользователю доступны табы Your Feed, Global Feed после регистрации", async ({
