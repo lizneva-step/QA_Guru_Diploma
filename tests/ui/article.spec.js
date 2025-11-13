@@ -32,11 +32,8 @@ test.describe("Действия со статьёй", () => {
     // Нажать новая заметка
     await main.clickNewArticleButton();
     
-    // Ввести имя, описание, текст, тег
-    await articleEditor.fillArticleForm(articleData);
-    
-    // Нажать публиковать
-    await articleEditor.clickPublishArticleButton();
+    // Создание и публикация статьи
+    await articleEditor.createAndPublishArticle(articleData);
 
     // Assert - проверка результатов 
     await expect(articleView.articleTitle).toBeVisible();
@@ -73,11 +70,8 @@ test.describe("Действия со статьёй", () => {
     // Нажать новая заметка
     await main.clickNewArticleButton();
     
-    // Ввести имя, описание, текст, тег
-    await articleEditor.fillArticleForm(articleData);
-    
-    // Нажать публиковать
-    await articleEditor.clickPublishArticleButton();
+    // Создание и публикация статьи
+    await articleEditor.createAndPublishArticle(articleData);
     
     // Ввести комментарий и отправить
     const commentText = faker.lorem.sentence(2);
@@ -112,11 +106,8 @@ test.describe("Действия со статьёй", () => {
     // Нажать новая заметка
     await main.clickNewArticleButton();
     
-    // Ввести имя, описание, текст, тег
-    await articleEditor.fillArticleForm(articleData);
-    
-    // Нажать публиковать
-    await articleEditor.clickPublishArticleButton();
+    // Создание и публикация статьи
+    await articleEditor.createAndPublishArticle(articleData);
     
     // Нажать Delete Article
     await articleView.deleteArticle();

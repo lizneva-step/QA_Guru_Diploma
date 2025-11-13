@@ -16,28 +16,13 @@ export class ArticleEditorPage {
   }
 
   // Бизнесовые действия со страницей редактора
-  async createAndPublishArticle(articleData) {
-    return test.step("Создание и публикация статьи", async (step) => {
-      await this.inputArticleTitle.fill(articleData.title);
-      await this.inputAbout.fill(articleData.about);
-      await this.inputArticleText.fill(articleData.body);
-      await this.inputTags.fill(articleData.tags);
-      await this.publishArticleButton.click();
-    });
-  }
-
-  async fillArticleForm(articleData) {
-    return test.step("Заполнение формы статьи", async (step) => {
-      await this.inputArticleTitle.fill(articleData.title);
-      await this.inputAbout.fill(articleData.about);
-      await this.inputArticleText.fill(articleData.body);
-      await this.inputTags.fill(articleData.tags);
-    });
-  }
-
-  async clickPublishArticleButton() {
-    return test.step("Клик по кнопке публикации статьи", async (step) => {
-      await this.publishArticleButton.click();
+    async createAndPublishArticle(articleData) {
+        return test.step("Создание и публикация статьи", async (step) => {
+        await this.inputArticleTitle.fill(articleData.title);
+        await this.inputAbout.fill(articleData.about);
+        await this.inputArticleText.fill(articleData.body);
+        await this.inputTags.fill(articleData.tags);
+        await this.publishArticleButton.click();
     });
   }
 }
