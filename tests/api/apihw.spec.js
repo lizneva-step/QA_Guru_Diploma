@@ -1,5 +1,5 @@
 import { test, expect } from "../../src/fixtures/api.fixture.js";
-import { toDoBuilder } from "../../src/builders/builders.todo.js";
+import { toDoBuilder } from "../../src/builders";
 import { faker } from "@faker-js/faker";
 
 test.describe("Challenge API", () => {
