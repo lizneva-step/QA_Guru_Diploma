@@ -23,7 +23,7 @@ test.describe("Действия со статьёй", () => {
       .addTags(faker.lorem.word())
       .generate();
 
-    const { main, register, article } = app;
+    const { main, register, articleEditor, articleView } = app;
 
     // Act - выполнение действий
     await main.gotoRegister();
@@ -33,18 +33,18 @@ test.describe("Действия со статьёй", () => {
     await main.clickNewArticleButton();
     
     // Ввести имя, описание, текст, тег
-    await article.fillArticleForm(articleData);
+    await articleEditor.fillArticleForm(articleData);
     
     // Нажать публиковать
-    await article.clickPublishArticleButton();
+    await articleEditor.clickPublishArticleButton();
 
     // Assert - проверка результатов 
-    await expect(article.articleTitle).toBeVisible();
-    await expect(article.articleText).toBeVisible();
-    await expect(article.tags).toBeVisible();    
-    await expect(article.articleTitle).toContainText(articleData.title);
-    await expect(article.articleText).toContainText(articleData.body);
-    await expect(article.tags).toContainText(articleData.tags);
+    await expect(articleView.articleTitle).toBeVisible();
+    await expect(articleView.articleText).toBeVisible();
+    await expect(articleView.tags).toBeVisible();    
+    await expect(articleView.articleTitle).toContainText(articleData.title);
+    await expect(articleView.articleText).toContainText(articleData.body);
+    await expect(articleView.tags).toContainText(articleData.tags);
   });
 
   test("Пользователь может оставить комментарий под статьёй", async ({
@@ -64,7 +64,7 @@ test.describe("Действия со статьёй", () => {
       .addTags(faker.lorem.word())
       .generate();
 
-    const { main, register, article } = app;
+    const { main, register, articleEditor, articleView } = app;
 
     // Act - выполнение действий
     await main.gotoRegister();
@@ -74,18 +74,18 @@ test.describe("Действия со статьёй", () => {
     await main.clickNewArticleButton();
     
     // Ввести имя, описание, текст, тег
-    await article.fillArticleForm(articleData);
+    await articleEditor.fillArticleForm(articleData);
     
     // Нажать публиковать
-    await article.clickPublishArticleButton();
+    await articleEditor.clickPublishArticleButton();
     
     // Ввести комментарий и отправить
     const commentText = faker.lorem.sentence(2);
-    await article.addComment(commentText);
+    await articleView.addComment(commentText);
 
     // Assert - проверка результатов 
-    await article.checkCommentDisplayed(commentText);
-    await article.checkAuthorDisplayed(user.name);
+    await articleView.checkCommentDisplayed(commentText);
+    await articleView.checkAuthorDisplayed(user.name);
   });
 
   test("Пользователь может удалить статью", async ({ page, app }) => {
@@ -103,7 +103,7 @@ test.describe("Действия со статьёй", () => {
       .addTags(faker.lorem.word())
       .generate();
 
-    const { main, register, article } = app;
+    const { main, register, articleEditor, articleView } = app;
 
     // Act - выполнение действий
     await main.gotoRegister();
@@ -113,16 +113,16 @@ test.describe("Действия со статьёй", () => {
     await main.clickNewArticleButton();
     
     // Ввести имя, описание, текст, тег
-    await article.fillArticleForm(articleData);
+    await articleEditor.fillArticleForm(articleData);
     
     // Нажать публиковать
-    await article.clickPublishArticleButton();
+    await articleEditor.clickPublishArticleButton();
     
     // Нажать Delete Article
-    await article.deleteArticle();
+    await articleView.deleteArticle();
     
     // Подтвердить действие (нажать ок) с browser dialogs
-    await article.handleDeleteConfirmationDialog();
+    await articleView.handleDeleteConfirmationDialog();
     
     // Перейти на домашнюю страницу
     await main.clickHomeButton();
@@ -131,7 +131,7 @@ test.describe("Действия со статьёй", () => {
     await main.clickGlobalFeedButton();
     
     // Проверить что заметка не отображается
-    await article.waitForArticleToDisappear(articleData.title);
+    await articleView.waitForArticleToDisappear(articleData.title);
 
     // Assert - проверка результатов 
     // Все проверки уже выполнены выше
