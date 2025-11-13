@@ -6,47 +6,49 @@
 // 4. Проверить 2 табу название
 // 5. Проверить 2 табу: проверяем, что есть 3 элемента (поста)
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
-import { MainPage, RegisterPage } from "../../src/pages/index";
-const URL = "https://realworld.qa.guru/";
+import { UserBuilder } from "../../src/builders/index.js";
 
 test.describe("Главная страница", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(URL);
+    await page.goto('/');
   });
 
   test("Пользователю доступны табы Your Feed, Global Feed после регистрации", async ({
-    page,
+    page, app
   }) => {
-    const user = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
+    // Arrange - явная подготовка данных через Builder
+    const user = new UserBuilder()
+      .addName(faker.person.fullName())
+      .addEmail(faker.internet.email())
+      .addPassword(faker.internet.password())
+      .generate();
 
-    // 0. Зарегистрироваться
-    const mainPage = new MainPage(page);
-    const registerPage = new RegisterPage(page);
+    const { main, register } = app;
 
-    await mainPage.gotoRegister();
-    await registerPage.register(user);
+    // Act - выполнение действий
+    await main.gotoRegister();
+    await register.register(user);
+    
+    // Проверить 1 табу название
+    await expect(main.tabYourFeed).toBeVisible();
+    await expect(main.tabYourFeed).toHaveText("Your Feed");
 
-    // 1. Проверить 1 табу название
-    await expect(mainPage.tabYourFeed).toBeVisible();
-    await expect(mainPage.tabYourFeed).toHaveText("Your Feed");
+    // Проверить 1 табу: текст Articles not available
+    await expect(main.tabYourFeedText).toBeVisible();
 
-    // 2. Проверить 1 табу: текст Articles not available
-    await expect(mainPage.tabYourFeedText).toBeVisible();
+    // Перейти к 2 табе
+    await main.clickGlobalFeedButton();
 
-    // 3. Перейти к 2 табе
-    await mainPage.clickGlobalFeedButton();
+    // Проверить 2 табу название
+    await expect(main.tabGlobalFeed).toBeVisible();
+    await expect(main.tabGlobalFeed).toHaveText("Global Feed");
 
-    // 4. Проверить 2 табу название
-    await expect(mainPage.tabGlobalFeed).toBeVisible();
-    await expect(mainPage.tabGlobalFeed).toHaveText("Global Feed");
+    // Проверить 2 табу: проверяем, что есть 3 элемента (поста)
+    await expect(main.tabGlobalFeedText).toHaveCount(3);
 
-    // 5. Проверить 2 табу: проверяем, что есть 3 элемента (поста)
-    await expect(mainPage.tabGlobalFeedText).toHaveCount(3);
+    // Assert - проверка результатов (позитивный тест - проверяем все поля по максимуму)
+    // Все проверки уже выполнены выше
   });
 });

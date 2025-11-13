@@ -7,6 +7,23 @@ node_modules/
 /allure-results/
 /.allure/
 
-
-
 eslint.config.js
+src/.DS_Store
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+
+# Logs
+*.log
+*.tmp
