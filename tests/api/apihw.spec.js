@@ -98,35 +98,37 @@ test.describe("Challenge API", () => {
     expect(responseBody.todos.length).toBeLessThanOrEqual(allBody2.todos.length);
   });
 
-  test("09 POST /todos (201) - создать новую задачу", { tag: '@API @POST @functional' }, async ({ request }, testInfo) => {
-    
-    const responseToken = await request.post(`${testInfo.project.use.baseURL}/challenger`); // Получаем СВЕЖИЙ токен перед каждым POST-запросом (иначе 401)
-    expect(responseToken.status()).toBe(201);
-    const token = responseToken.headers()['x-challenger'];
+  test("09 POST /todos (201) - создать новую задачу", async ({ request }, testInfo) => {
+  const responseToken = await request.post(`${testInfo.project.use.baseURL}/challenger`);
+  expect(responseToken.status()).toBe(201);
+  const token = responseToken.headers()['x-challenger'];
 
-    const createTodo = new toDoBuilder()
-      .addTitle()
-      .addDoneStatus(false)
-      .addDescription()
-      .generate();
+  const createTodo = new toDoBuilder()
+    .addTitle()
+    .addDoneStatus(false)
+    .addDescription()
+    .generate();
 
-    const response = await request.post(`${testInfo.project.use.baseURL}/todos`, {
-      headers: {
-        "X-CHALLENGER": token,
-        "Content-Type": "application/json",
-      },
-      data: createTodo,
-    });
-
-    const body = await response.json();
-    const headers = response.headers();
-
-    expect(response.status()).toBe(201);
-    expect(headers).toEqual(expect.objectContaining({ "x-challenger": token }));
-    expect(body.doneStatus).toBe(false);
-    expect(body.title).toBe("Наименование задания");
-    expect(body.description).toBe("Пройти по Абрикосовой, свернуть на Виноградную");
+  const response = await request.post(`${testInfo.project.use.baseURL}/todos`, {
+    headers: {
+      "X-CHALLENGER": token,
+      "Content-Type": "application/json",
+    },
+    data: createTodo,
   });
+
+  const body = await response.json();
+  const headers = response.headers();
+
+  expect(response.status()).toBe(201);
+  expect(headers).toEqual(expect.objectContaining({ "x-challenger": token }));
+
+  // Проверяем, что ответ совпадает с отправленными данными
+  expect(body.title).toBe(createTodo.title);
+  expect(body.description).toBe(createTodo.description);
+  expect(body.doneStatus).toBe(createTodo.doneStatus);
+});
+
 
   test("10 POST /todos (400) - fail validation on doneStatus field", { tag: '@API @POST @validation' }, async ({ request }, testInfo) => {
     
@@ -200,9 +202,9 @@ test.describe("Challenge API", () => {
   
   // Используем builder для создания задачи с максимальной длиной
   const createTodo = new toDoBuilder()
-    .withMaxLengthTitle()  // Используем правильное название метода
+    .withMaxLengthTitle()  
     .addDoneStatus(true)
-    .withMaxLengthDescription()  // Используем правильное название метода
+    .withMaxLengthDescription()  
     .generate();
   
   // Отправляем POST запрос
@@ -212,9 +214,9 @@ test.describe("Challenge API", () => {
   
   // Проверяем тело ответа
   const body = await response.json();
-  expect(body.title).toBe("this title has just enough characters to validate.");
+  expect(body.title).toBe(createTodo.title);
   expect(body.doneStatus).toBe(true);
-  expect(body.description).toBe("This description has just enough characters to validate because it is exactly 200 characters in length. I had to use a tool to check this - so I should have used a CounterString to be absolutely sure.");
+  expect(body.description).toBe(createTodo.description); 
   
   // Проверяем наличие заголовка Location
   const headers = response.headers();
