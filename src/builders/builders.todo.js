@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 export class toDoBuilder {
   constructor() {
     this.reset();
@@ -12,8 +14,8 @@ export class toDoBuilder {
     return this;
   }
 
-  addTitle(title = "Наименование задания") {
-    this.data.title = title;
+  addTitle(title = null) {
+    this.data.title = title || faker.lorem.words(3);
     return this;
   }
 
@@ -22,37 +24,42 @@ export class toDoBuilder {
     return this;
   }
 
-  addDescription(description = "Пройти по Абрикосовой, свернуть на Виноградную") { 
-    this.data.description = description;
+  addDescription(description = null) {
+    this.data.description = description || faker.lorem.sentence();
     return this;
   }
 
   moreThanMaxLengthTitle() {
-    this.data.title = "Пройти по Абрикосовой свернуть на Виноградную далее"; //51
+    // Генерируем строку длиной 51 символ динамически
+    this.data.title = faker.string.alpha({ length: 51 });
     return this;
   }
 
- withTooLongDescription() {
-    this.data.description = "Пройти по улице Абрикосовой, внимательно следуя вдоль домов с номерами от 10 до 30, затем на перекрестке свернуть направо на улицу Виноградную. Двигаться прямо, минуя парк, лавочки и магазин, до следующего крупного перекрестка, где нужно будет остановиться."; // 201 символ
+  withTooLongDescription() {
+    // Генерируем описание длиной 201 символ динамически
+    this.data.description = faker.string.alpha({ length: 201 });
     return this;
   }
 
   withMaxLengthTitle() {
-  this.data.title = "this title has just enough characters to validate.";
-  return this;
-}
-
-withMaxLengthDescription() {
-  this.data.description = "This description has just enough characters to validate because it is exactly 200 characters in length. I had to use a tool to check this - so I should have used a CounterString to be absolutely sure.";
-  return this;
-}
-
-withExactMaxLengthDescription() {
-    this.data.description = "A".repeat(5000); // 5000 
+    // Генерируем строку длиной 45 символов (примерно как в оригинале)
+    this.data.title = faker.string.alpha({ length: 45 });
     return this;
   }
 
-withMinimalUpdateData() {
+  withMaxLengthDescription() {
+    // Генерируем описание длиной 200 символов динамически
+    this.data.description = faker.string.alpha({ length: 200 });
+    return this;
+  }
+
+  withExactMaxLengthDescription() {
+    // Генерируем описание длиной 5000 символов динамически
+    this.data.description = faker.string.alpha({ length: 5000 });
+    return this;
+  }
+
+  withMinimalUpdateData() {
     this.data = {
       title: "updated title"
     };
