@@ -6,9 +6,9 @@
 // 4. Проверить 2 табу название
 // 5. Проверить 2 табу: проверяем, что есть 3 элемента (поста)
 
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
-import { MainPage, RegisterPage } from "../../src/pages/index";
+//import { MainPage, RegisterPage } from "../../src/pages/index";
 const URL = "https://realworld.qa.guru/";
 
 test.describe("Главная страница", () => {
@@ -17,7 +17,7 @@ test.describe("Главная страница", () => {
   });
 
   test("Пользователю доступны табы Your Feed, Global Feed после регистрации", async ({
-    page,
+    page, app
   }) => {
     const user = {
       name: faker.person.fullName(),
@@ -26,27 +26,26 @@ test.describe("Главная страница", () => {
     };
 
     // 0. Зарегистрироваться
-    const mainPage = new MainPage(page);
-    const registerPage = new RegisterPage(page);
+    const { main, register } = app;
 
-    await mainPage.gotoRegister();
-    await registerPage.register(user);
+    await main.gotoRegister();
+    await register.register(user);
 
     // 1. Проверить 1 табу название
-    await expect(mainPage.tabYourFeed).toBeVisible();
-    await expect(mainPage.tabYourFeed).toHaveText("Your Feed");
+    await expect(main.tabYourFeed).toBeVisible();
+    await expect(main.tabYourFeed).toHaveText("Your Feed");
 
     // 2. Проверить 1 табу: текст Articles not available
-    await expect(mainPage.tabYourFeedText).toBeVisible();
+    await expect(main.tabYourFeedText).toBeVisible();
 
     // 3. Перейти к 2 табе
-    await mainPage.clickGlobalFeedButton();
+    await main.clickGlobalFeedButton();
 
     // 4. Проверить 2 табу название
-    await expect(mainPage.tabGlobalFeed).toBeVisible();
-    await expect(mainPage.tabGlobalFeed).toHaveText("Global Feed");
+    await expect(main.tabGlobalFeed).toBeVisible();
+    await expect(main.tabGlobalFeed).toHaveText("Global Feed");
 
     // 5. Проверить 2 табу: проверяем, что есть 3 элемента (поста)
-    await expect(mainPage.tabGlobalFeedText).toHaveCount(3);
+    await expect(main.tabGlobalFeedText).toHaveCount(3);
   });
 });

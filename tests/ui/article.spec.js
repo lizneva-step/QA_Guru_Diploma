@@ -1,10 +1,9 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
 import {
-  MainPage,
-  RegisterPage,
- // EditorPage,
-  ArticlePage,
+  // MainPage,
+  // RegisterPage,
+  // ArticlePage,
 } from "../../src/pages/index";
 
 const URL = "https://realworld.qa.guru/";
@@ -14,7 +13,7 @@ test.describe("Действия со статьёй", () => {
     await page.goto(URL);
   });
 
-  test("Пользователь может создать новую статью", async ({ page }) => {
+  test("Пользователь может создать новую статью", async ({ page, app }) => {
     const user = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
@@ -28,30 +27,28 @@ test.describe("Действия со статьёй", () => {
     };
 
     /// 0. Зарегистрироваться
-    const mainPage = new MainPage(page);
-    const registerPage = new RegisterPage(page);
-    const articlePage = new ArticlePage(page); // Исправлено: теперь правильно
+    const { main, register, article } = app;
 
-    await mainPage.gotoRegister();
-    await registerPage.register(user);
+    await main.gotoRegister();
+    await register.register(user);
 
     // 1. Нажать новая заметка
-    await mainPage.clickNewArticleButton();
+    await main.clickNewArticleButton();
 
     // 2. Ввести имя, описание, текст, тег
-    await articlePage.fillArticleForm(articleData);
+    await article.fillArticleForm(articleData);
 
     // 3. Нажать публиковать
-    await articlePage.clickPublishArticleButton();
+    await article.clickPublishArticleButton();
 
     // 4. Проверить имя, описание, текст, тег
-    await expect(articlePage.articleTitle).toBeVisible();
-    await expect(articlePage.articleText).toBeVisible();
-    await expect(articlePage.tags).toBeVisible();
+    await expect(article.articleTitle).toBeVisible();
+    await expect(article.articleText).toBeVisible();
+    await expect(article.tags).toBeVisible();
   });
 
   test("Пользователь может оставить комментарий под статьёй", async ({
-    page,
+    page, app
   }) => {
     const user = {
       name: faker.person.fullName(),
@@ -66,35 +63,33 @@ test.describe("Действия со статьёй", () => {
     };
 
     /// 0. Зарегистрироваться
-    const mainPage = new MainPage(page);
-    const registerPage = new RegisterPage(page);
-    const articlePage = new ArticlePage(page);
+    const { main, register, article } = app;
 
-    await mainPage.gotoRegister();
-    await registerPage.register(user);
+    await main.gotoRegister();
+    await register.register(user);
 
     // 1. Нажать новая заметка
-    await mainPage.clickNewArticleButton();
+    await main.clickNewArticleButton();
 
     // 2. Ввести имя, описание, текст, тег
-    await articlePage.fillArticleForm(articleData);
+    await article.fillArticleForm(articleData);
 
     // 3. Нажать публиковать
-    await articlePage.clickPublishArticleButton();
+    await article.clickPublishArticleButton();
 
-    // 4. Создаем экземпляр ArticlePage (уже создан выше)
+    // 4. Создаем экземпляр article (уже создан выше)
     // 5. Ввести комментарий и отправить
     const commentText = faker.lorem.sentence(2);
-    await articlePage.addComment(commentText);
+    await article.addComment(commentText);
 
     // 6. Проверить что отображается комментарий
-    await articlePage.checkCommentDisplayed(commentText);
+    await article.checkCommentDisplayed(commentText);
 
     // 7. Проверить что отображается пользователь
-    await articlePage.checkAuthorDisplayed(user.name);
+    await article.checkAuthorDisplayed(user.name);
   });
 
-  test("Пользователь может удалить статью", async ({ page }) => {
+  test("Пользователь может удалить статью", async ({ page, app }) => {
     const user = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
@@ -108,37 +103,35 @@ test.describe("Действия со статьёй", () => {
     };
 
     /// 0. Зарегистрироваться
-    const mainPage = new MainPage(page);
-    const registerPage = new RegisterPage(page);
-    //const editorPage = new EditorPage(page);
-    const articlePage = new ArticlePage(page);
+    const { main, register, article } = app;
 
-    await mainPage.gotoRegister();
-    await registerPage.register(user);
+    await main.gotoRegister();
+    await register.register(user);
 
     // 1. Нажать новая заметка
-    await mainPage.clickNewArticleButton();
+    await main.clickNewArticleButton();
 
     // 2. Ввести имя, описание, текст, тег
-    await articlePage.fillArticleForm(articleData);
+    await article.fillArticleForm(articleData);
 
     // 3. Нажать публиковать
-    await articlePage.clickPublishArticleButton();
+    await article.clickPublishArticleButton();
 
-    // 4. Создаем экземпляр ArticlePage (уже создан выше)
+    // 4. Создаем экземпляр article (уже создан выше)
     // 5. Нажать Delete Article
-    await articlePage.deleteArticle();
+    await article.deleteArticle();
 
     // 6. Подтвердить действие (нажать ок) с browser dialogs
-    await articlePage.handleDeleteConfirmationDialog();
+    await article.handleDeleteConfirmationDialog();
 
     // 7. Перейти на домашнюю страницу
-    await mainPage.clickHomeButton();
+    await main.clickHomeButton();
 
     // 8. Перейти в глобал фид
-    await mainPage.clickGlobalFeedButton();
+    await main.clickGlobalFeedButton();
 
     // 9. Проверить что заметка не отображается
-    await articlePage.waitForArticleToDisappear(articleData.title);
+    await article.waitForArticleToDisappear(articleData.title);
   });
 });
+
