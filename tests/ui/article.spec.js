@@ -1,5 +1,7 @@
 import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
+import { UserBuilder } from "../../src/builders/index.js";
+import { ArticleBuilder } from "../../src/builders/index.js";
 
 const URL = "https://realworld.qa.guru/";
 
@@ -9,19 +11,19 @@ test.describe("Действия со статьёй", () => {
   });
 
   test("Пользователь может создать новую статью", async ({ page, app }) => {
-    // Arrange - явная подготовка данных
-    const user = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
+    // Arrange - явная подготовка данных через Builders
+    const user = new UserBuilder()
+      .addName(faker.person.fullName())
+      .addEmail(faker.internet.email())
+      .addPassword(faker.internet.password())
+      .generate();
     
-    const articleData = {
-      title: faker.lorem.sentence(3),
-      about: faker.lorem.sentence(5),
-      body: faker.lorem.paragraphs(3),
-      tags: faker.lorem.word(),
-    };
+    const articleData = new ArticleBuilder()
+      .addTitle(faker.lorem.sentence(3))
+      .addAbout(faker.lorem.sentence(5))
+      .addBody(faker.lorem.paragraphs(3))
+      .addTags(faker.lorem.word())
+      .generate();
 
     const { main, register, article } = app;
 
@@ -52,19 +54,19 @@ test.describe("Действия со статьёй", () => {
   test("Пользователь может оставить комментарий под статьёй", async ({
     page, app
   }) => {
-    // Arrange - явная подготовка данных
-    const user = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
+    // Arrange - явная подготовка данных через Builders
+    const user = new UserBuilder()
+      .addName(faker.person.fullName())
+      .addEmail(faker.internet.email())
+      .addPassword(faker.internet.password())
+      .generate();
     
-    const articleData = {
-      title: faker.lorem.sentence(3),
-      about: faker.lorem.sentence(5),
-      body: faker.lorem.paragraphs(3),
-      tags: faker.lorem.word(),
-    };
+    const articleData = new ArticleBuilder()
+      .addTitle(faker.lorem.sentence(3))
+      .addAbout(faker.lorem.sentence(5))
+      .addBody(faker.lorem.paragraphs(3))
+      .addTags(faker.lorem.word())
+      .generate();
 
     const { main, register, article } = app;
 
@@ -91,19 +93,19 @@ test.describe("Действия со статьёй", () => {
   });
 
   test("Пользователь может удалить статью", async ({ page, app }) => {
-    // Arrange - явная подготовка данных
-    const user = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
+    // Arrange - явная подготовка данных через Builders
+    const user = new UserBuilder()
+      .addName(faker.person.fullName())
+      .addEmail(faker.internet.email())
+      .addPassword(faker.internet.password())
+      .generate();
     
-    const articleData = {
-      title: faker.lorem.sentence(3),
-      about: faker.lorem.sentence(5),
-      body: faker.lorem.paragraphs(3),
-      tags: faker.lorem.word(),
-    };
+    const articleData = new ArticleBuilder()
+      .addTitle(faker.lorem.sentence(3))
+      .addAbout(faker.lorem.sentence(5))
+      .addBody(faker.lorem.paragraphs(3))
+      .addTags(faker.lorem.word())
+      .generate();
 
     const { main, register, article } = app;
 

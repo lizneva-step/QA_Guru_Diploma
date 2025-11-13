@@ -1,5 +1,6 @@
 import { test, expect } from "../../src/fixtures/fixture.js";
 import { faker } from "@faker-js/faker";
+import { UserBuilder } from "../../src/builders/index.js";
 
 const URL = "https://realworld.qa.guru/";
 
@@ -11,12 +12,12 @@ test.describe("Обновление профиля", () => {
   test("Пользователь может обновить имя и почту в профиле", async ({
     page, app
   }) => {
-    // Arrange - явная подготовка данных
-    const user = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
+    // Arrange - явная подготовка данных через Builder
+    const user = new UserBuilder()
+      .addName(faker.person.fullName())
+      .addEmail(faker.internet.email())
+      .addPassword(faker.internet.password())
+      .generate();
 
     const { main, register, article, settings } = app;
 
