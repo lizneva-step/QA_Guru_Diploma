@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test';
-import { Api } from '../api.service.js';
-import { TodosService } from '../todos.service.js';
-import { HeartbeatService } from '../heartbeat.service.js';
+import { Api } from '../services/api.service.js';
+import { TodosService } from '../services/todos.service.js';
+import { HeartbeatService } from '../services/heartbeat.service.js';
 
 export const test = base.extend({
   api: async ({ request }, use) => {
