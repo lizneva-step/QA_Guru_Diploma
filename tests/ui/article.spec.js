@@ -40,12 +40,10 @@ test.describe("Действия со статьёй", () => {
     // Нажать публиковать
     await article.clickPublishArticleButton();
 
-    // Assert - проверка результатов (позитивный тест - проверяем все поля по максимуму)
+    // Assert - проверка результатов 
     await expect(article.articleTitle).toBeVisible();
     await expect(article.articleText).toBeVisible();
-    await expect(article.tags).toBeVisible();
-    
-    // Дополнительные проверки по максимуму
+    await expect(article.tags).toBeVisible();    
     await expect(article.articleTitle).toContainText(articleData.title);
     await expect(article.articleText).toContainText(articleData.body);
     await expect(article.tags).toContainText(articleData.tags);
@@ -87,7 +85,7 @@ test.describe("Действия со статьёй", () => {
     const commentText = faker.lorem.sentence(2);
     await article.addComment(commentText);
 
-    // Assert - проверка результатов (позитивный тест - проверяем все поля по максимуму)
+    // Assert - проверка результатов 
     await article.checkCommentDisplayed(commentText);
     await article.checkAuthorDisplayed(user.name);
   });
@@ -137,7 +135,7 @@ test.describe("Действия со статьёй", () => {
     // Проверить что заметка не отображается
     await article.waitForArticleToDisappear(articleData.title);
 
-    // Assert - проверка результатов (позитивный тест - проверяем все поля по максимуму)
+    // Assert - проверка результатов 
     // Все проверки уже выполнены выше
   });
 });
